@@ -84,6 +84,7 @@
 /* Footer */
 footer {
     background-color: var(--bs-gray-500);
+    margin-top: 100px !important;
 }
 
 

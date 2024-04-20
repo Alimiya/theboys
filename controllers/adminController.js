@@ -1,8 +1,9 @@
 const fdb = require("../fdb/firebase").fdb
 const storage = require('../fdb/firebase').storage
 const uuid = require('uuid-v4')
+var request = require('request');
 const fs = require('fs')
-const {logger} = require("../middlewares/winston")
+const { logger } = require("../middlewares/winston")
 
 const metadata = {
     metadata: {
@@ -13,13 +14,13 @@ const metadata = {
 }
 
 exports.create = async (req, res) => {
-    var r = {r: 0}
-    const {attraction_name, description, short_description, address, schedule, phone, bus} = req.body
+    var r = { r: 0 }
+    const { attraction_name, description, short_description, address, schedule, phone } = req.body
     const attraction_img = req.file
 
     try {
         if (!attraction_img) return res.send(JSON.stringify(r))
-        if (!attraction_name || !description || !short_description || !address || !schedule || !phone || !bus) {
+        if (!attraction_name || !description || !short_description || !address || !schedule || !phone) {
             fs.unlink(attraction_img.path, () => {
             })
             return res.send(JSON.stringify(r))
@@ -32,7 +33,7 @@ exports.create = async (req, res) => {
             address: address,
             schedule: schedule,
             phone: phone,
-            bus: bus
+       
         }).then(async (attraction) => {
             await storage.upload(attraction_img.path, {
                 gzip: true,
@@ -41,12 +42,34 @@ exports.create = async (req, res) => {
             })
             var attraction_img_url = `https://firebasestorage.googleapis.com/v0/b/smart-guide-d28d6.appspot.com/o/attractions%2F${attraction.id}?alt=media`
 
-            await fdb.collection('attractions').doc(attraction.id).update({attraction_img: attraction_img_url}).then(() => {
+            await fdb.collection('attractions').doc(attraction.id).update({ attraction_img: attraction_img_url }).then(() => {
                 r['r'] = 1
                 res.send(r)
                 logger.info(`Created Attraction ${attraction.id}, ${attraction_name}`)
                 fs.unlink(attraction_img.path, () => {
-                })
+                });
+            
+                var options = {
+                    'method': 'POST',
+                    'url': 'https://c1463.webapi.ai/docs',
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Cookie': 'Cookie_1=value; admin_id=1; sk=fdd7fd6a30822a430a890e0e9f25b479c37d3e9f'
+                      },
+                    body: JSON.stringify({
+                        "action": "saveDocument",
+                        "source": "",
+                        "title": attraction_name,
+                        "content": description,
+                        "doc_id": null
+                    })
+
+                };
+                request(options, function (error, response) {
+                    if (error) throw new Error(error);
+                    console.log(response.body);
+                });
+
             })
 
         })
@@ -64,7 +87,7 @@ exports.get = async (req, res) => {
     try {
         const attractions = await fdb.collection('attractions').get()
         attractions.docs.forEach((attraction) => {
-            data.push({...attraction.data(), attraction_id: attraction.id})
+            data.push({ ...attraction.data(), attraction_id: attraction.id })
         })
         res.send(data)
     } catch (err) {
@@ -74,8 +97,8 @@ exports.get = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-    let r = {r: 0}
-    let {attraction_id, attraction_name, description, short_description, address, schedule, phone, bus} = req.body
+    let r = { r: 0 }
+    let { attraction_id, attraction_name, description, short_description, address, schedule, phone, bus } = req.body
     let new_attraction_img = req.file
 
     if (!attraction_name || !description || !short_description || !address || !schedule || !phone || !bus) {
@@ -117,7 +140,7 @@ exports.update = async (req, res) => {
     }
 }
 exports.delete = async (req, res) => {
-    let r = {r: 0}
+    let r = { r: 0 }
 
     let attraction_id = req.body.attraction_id
 

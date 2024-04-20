@@ -393,7 +393,10 @@
                 processData: false,
                 success: function (response) {
                     console.log('Success:', response);
-                    // Handle the successful response
+                    if(response.r){
+                        alert('Успешно добавлено')
+                        window.location.reload()
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);

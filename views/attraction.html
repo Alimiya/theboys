@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <style>
-        body{
+        body {
             background-color: aliceblue;
         }
 
@@ -14,64 +14,72 @@
             flex-direction: column;
         }
 
-        @media (max-width: 1300px){
+        @media (max-width: 1300px) {
             .additional {
-            flex-direction: row ;
-            gap: 50px;
-        }
-        #schedule {
-            margin-top: 0 !important;
-        }
-        #schedule > div {
-            flex-direction: column !important;
-        }
+                flex-direction: row;
+                gap: 50px;
+            }
+
+            #main_block_attraction {
+                flex-wrap: wrap;
+            }
+
+            #schedule {
+                margin-top: 0 !important;
+            }
+
+            #schedule>div {
+                flex-direction: column !important;
+            }
         }
 
-        @media (max-width: 1000px){
+        @media (max-width: 1000px) {
             .additional {
-            flex-direction: row ;
-            gap: 50px;
-        }
-        .address{
-            width: 100%;
-        }
-        .busses  {
-            margin-top: 0 !important;
-        }
+                flex-direction: row;
+                gap: 50px;
+            }
+
+            .address {
+                width: 100%;
+            }
+
+            .busses {
+                margin-top: 0 !important;
+            }
         }
 
-        @media (max-width: 500px){
+        @media (max-width: 500px) {
             .additional {
-            flex-direction: row ;
-            gap: 50px;
-        }
-        .additional {
-            width: 100%;
-        }
-        #schedule {
-            width: 100%;
-        }
-        .busses{
-            width: 100%;
-        }
-        #map{
-            width: 100% !important;
-        }
-        }
+                flex-direction: row;
+                gap: 50px;
+            }
 
+            .additional {
+                width: 100%;
+            }
 
+            #schedule {
+                width: 100%;
+            }
 
-       
+            .busses {
+                width: 100%;
+            }
+
+            #map {
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container d-flex gap-5 attraction align-items-start flex-wrap">
-       
+    <div class="container d-flex gap-5 attraction align-items-start" id="main_block_attraction">
+
         <div class="content bg-white p-5 rounded">
             <img src="<%= data.attraction_img %>" class="rounded mb-3" style="width: 90%;" alt="">
-            <h1>
+            <h1 style="width: 100%;">
                 <%= data.attraction_name %>
             </h1>
             <p>
@@ -98,9 +106,7 @@
 
             <div id="schedule" class="bg-white p-3 rounded mt-4">
                 <h4>Расписание</h4>
-                <%
-                var scheduleString = data.schedule;
-                %>
+                <% var scheduleString=data.schedule; %>
                     <% var scheduleArray=JSON.parse(scheduleString); %>
                         <% var daysOfWeek=["Понедельник", "Вторник" , "Среда" , "Четверг" , "Пятница" , "Суббота"
                             , "Воскресенье" ]; %>
@@ -109,50 +115,58 @@
                                     <% var dayOfWeek=daysOfWeek[index]; %>
                                         <% if (daySchedule==="" ) { %>
 
-                                            <div class="bg-danger p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
-                                                <div><%= dayOfWeek %></div>
+                                            <div
+                                                class="bg-danger p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
+                                                <div>
+                                                    <%= dayOfWeek %>
+                                                </div>
                                                 <div>Не рабочий день</div>
                                             </div>
 
                                             <% } else { %>
-                                                <div class="bg-info p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
-                                                    <div><%= dayOfWeek %></div>
-                                                    <div><%= daySchedule %></div>
+                                                <div
+                                                    class="bg-info p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
+                                                    <div>
+                                                        <%= dayOfWeek %>
+                                                    </div>
+                                                    <div>
+                                                        <%= daySchedule %>
+                                                    </div>
                                                 </div>
-                                    <% } %>
-                                <% }); %>
-                            <% } else {  %>
-                                <div class="bg-dark p-2 rounded text-white mt-1">
-                                    Еще нет расписания
-                                 </div>
-                                
-                                 <% }%>
+                                                <% } %>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <div class="bg-dark p-2 rounded text-white mt-1">
+                                                                Еще нет расписания
+                                                            </div>
+
+                                                            <% }%>
             </div>
 
             <div class="busses bg-white p-3 rounded mt-4">
                 <h4>Общественный транспорт</h4>
                 <div class="d-flex gap-3 flex-wrap">
-                    <%
-                var scheduleString = data.bus;
-                %>
-                    <% var bussesArray=JSON.parse(scheduleString); %>
-                    <% if(bussesArray) { %>
-                            <% bussesArray.forEach(function(bus, index) { %>
-                            
-                                <div class="bg-success p-2 rounded text-white mt-1">
-                                    <div class="d-flex align-items-center"> <span class="material-symbols-rounded">
-                                        directions_bus
-                                        </span><%= bus %> </div>
-                                </div>
+                    <% var scheduleString=data.bus; %>
+                        <% var bussesArray=JSON.parse(scheduleString); %>
+                            <% if(bussesArray) { %>
+                                <% bussesArray.forEach(function(bus, index) { %>
 
-                        <% }); %>
-                    <% } else {  %>
-                        <div class="bg-dark p-2 rounded text-white mt-1">
-                           Нет подходящего транспорта
-                        </div>
-                        <%  } %>
+                                    <div class="bg-success p-2 rounded text-white mt-1">
+                                        <div class="d-flex align-items-center"> <span class="material-symbols-rounded">
+                                                directions_bus
+                                            </span>
+                                            <%= bus %>
+                                        </div>
+                                    </div>
+
+                                    <% }); %>
+                                        <% } else { %>
+                                            <div class="bg-dark p-2 rounded text-white mt-1">
+                                                Нет подходящего транспорта
+                                            </div>
+                                            <% } %>
                 </div>
-               
+
             </div>
 
         </div>
@@ -179,13 +193,13 @@
         var daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
         $(() => {
             $('#end').val('<%= data.address %>');
-            setTimeout(() => {
-                if(document.getElementById('start').value){
-                    triggerClick()
-                }
-               
-            }, 1500)
-          
+            // setTimeout(() => {
+            //     if (document.getElementById('start').value) {
+            //         triggerClick()
+            //     }
+
+            // }, 1500)
+
         })
 
         function triggerClick() {
@@ -213,6 +227,7 @@
 
                     map.setCenter(pos);
                     document.getElementById('start').value = pos.lat + ', ' + pos.lng; // Set input value
+                    triggerClick()
                 }, function () {
                     handleLocationError(true, map.getCenter());
                 });
