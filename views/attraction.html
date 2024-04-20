@@ -6,19 +6,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <style>
-        .attraction .content {
-            max-width: 800px;
-        }
-        #start{
-            display: none;
-        }
+       
     </style>
 </head>
 
 <body>
 
-    <div class="container d-flex gap-5 attraction">
-        <div class="content">
+    <div class="container d-flex gap-5 attraction align-items-start flex-wrap">
+        <div class="content bg-white p-5 rounded">
             <h1>
                 <%= data.attraction_name %>
             </h1>
@@ -26,40 +21,103 @@
                 <%= data.description %>
             </p>
         </div>
-        <div class="additional">
-            <h4>Как пройти ?</h4>
-            <div>
-                <input id="start" type="text" placeholder="Ваш адрес" class="form-control mt-3">
-                <input id="end" type="text" placeholder="Введите адрес" class="form-control mt-3">
-                <select id="mode" onchange="calculateRoute()" class="form-select mt-3">
-                    <option value="DRIVING" selected>На машине</option>
-                    <option value="WALKING">Пешком</option>
-                    <option value="BICYCLING">Велотранспорт</option>
-                    <option value="TRANSIT">Transit</option>
-                  </select>
-                <button id="submit" class="btn btn-primary mt-3">Проложить маршрут</button>
+        <div class="additional d-flex flex-column flex-wrap">
+            <div class="address bg-white p-3 rounded">
+                <h4>Как пройти ?</h4>
+                <div>
+                    <input id="start" type="text" placeholder="Ваш адрес" class="form-control mt-3">
+                    <input id="end" type="text" placeholder="Введите адрес" class="form-control mt-3">
+                    <select id="mode" onchange="triggerClick()" class="form-select mt-3">
+                        <option value="DRIVING" selected>На машине</option>
+                        <option value="WALKING">Пешком</option>
+                        <option value="BICYCLING">Велотранспорт</option>
+                        <option value="TRANSIT">Transit</option>
+                    </select>
+                    <button id="submit" class="btn btn-primary mt-3">Проложить маршрут</button>
+                </div>
+                <div id="map" style="height: 400px; width: 400px;" class="mt-3"></div>
             </div>
-            <div id="map" style="height: 400px; width: 400px;" class="mt-3"></div>
+
+
+            <div id="schedule" class="bg-white p-3 rounded mt-4">
+                <h4>Расписание</h4>
+                <%
+                var scheduleString = data.schedule;
+                %>
+                    <% var scheduleArray=JSON.parse(scheduleString); %>
+                        <% var daysOfWeek=["Понедельник", "Вторник" , "Среда" , "Четверг" , "Пятница" , "Суббота"
+                            , "Воскресенье" ]; %>
+
+                            <% scheduleArray.forEach(function(daySchedule, index) { %>
+                                <% var dayOfWeek=daysOfWeek[index]; %>
+                                    <% if (daySchedule==="" ) { %>
+
+                                        <div class="bg-danger p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
+                                            <div><%= dayOfWeek %></div>
+                                             <div>Не рабочий день</div>
+                                        </div>
+
+                                        <% } else { %>
+                                            <div class="bg-info p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
+                                                <div><%= dayOfWeek %></div>
+                                                <div><%= daySchedule %></div>
+                                            </div>
+                                <% } %>
+                        <% }); %>
+            </div>
+
+            <div class="busses bg-white p-3 rounded mt-4">
+                <h4>Общественный транспорт</h4>
+                <div class="d-flex gap-3 flex-wrap">
+                    <%
+                var scheduleString = data.bus;
+                %>
+                    <% var bussesArray=JSON.parse(scheduleString); %>
+                            <% bussesArray.forEach(function(bus, index) { %>
+                                <div class="bg-success p-2 rounded text-white mt-1">
+                                    <div class="d-flex align-items-center"> <span class="material-symbols-rounded">
+                                        directions_bus
+                                        </span><%= bus %> </div>
+                                </div>
+
+                        <% }); %>
+                </div>
+               
+            </div>
+
         </div>
     </div>
 
 
 
-
-
-
-
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfmQaXF8mZQPL-WXCPMXtL2rC-ZJgW3WA&callback=initMap"></script>
+    <script type="text/javascript" src="https://s2.webapi.ai/chat-widget/uniq-chat.js"></script>
 
     <script>
+        var ailabs_user_info = {
+            'client': 'c1463',
+            'welcome_message': 'Welcome to the chat 👋',
+            'popup_mode': 0, //0-off, 1-auto popup after 10 seconds for new users
+            'input_comment': 'Type your message or /start to restart'
+        };
+        AILabsChatStart();
+    </script>
 
-        $(()=>{
+
+    <script>
+        var daysOfWeek = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
+        $(() => {
             $('#end').val('<%= data.address %>');
-            setTimeout(()=>{
-                $('#submit').click();
-            },1500)
+            setTimeout(() => {
+                triggerClick()
+            }, 1500)
+          
         })
+
+        function triggerClick() {
+            $('#submit').click()
+        }
 
 
         function initMap() {
@@ -121,8 +179,8 @@
             //     'Error: Your browser doesn\'t support geolocation.');
         }
 
-        
-       
+
+
     </script>
 </body>
 

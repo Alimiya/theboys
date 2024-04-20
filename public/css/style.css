@@ -94,9 +94,23 @@ footer {
 }
 
 .error img {
-    max-width: 500px;
+    max-width: 300px;
     width: 100%;
     height: auto;
 }
   
-  
+
+
+/* Attraction Page */
+
+
+
+.attraction .content {
+    max-width: 800px;
+}
+
+#start {
+    display: none;
+}
+
+/* End of Attraction Page */
