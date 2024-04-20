@@ -1,5 +1,5 @@
 const NodeCache = require('node-cache')
-const myCache = new NodeCache({ stdTTL: 60 })
+const myCache = new NodeCache({ stdTTL: 600 })
 
 const cacheMiddleware = (req, res, next) => {
     const key = req.originalUrl || req.url
