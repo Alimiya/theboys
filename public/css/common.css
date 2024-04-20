@@ -5,12 +5,26 @@
     --custom-red: #F02D59;
     --custom-darkblue: #111026;
     --custom-link: #8BA7C8;
+    --custom-title: #111026;
 }
 
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding: 0 1rem;
+
+    font-size: 16px !important;
+    font-family: 'Montserrat' !important;
+    line-height: 1.5 !important;
+    letter-spacing: .1rem !important;
+    color: var(--custom-main) !important;
+}
+
+.custom-btn__cyan {
+    background-color: var(--custom-cyan) !important;
+    border-color: var(--custom-cyan) !important;
+    color: #fff !important;
 }
 
 /* Removing glowing effect from bootstrap inputs */
@@ -29,8 +43,8 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
-.uneditable-input:focus {   
-  border-color: white;
-  box-shadow: none;
-  outline: 0 none;
+.uneditable-input:focus {
+    border-color: white;
+    box-shadow: none;
+    outline: 0 none;
 }
