@@ -47,23 +47,29 @@
                     <% var scheduleArray=JSON.parse(scheduleString); %>
                         <% var daysOfWeek=["Понедельник", "Вторник" , "Среда" , "Четверг" , "Пятница" , "Суббота"
                             , "Воскресенье" ]; %>
+                            <% if(scheduleArray) { %>
+                                <% scheduleArray.forEach(function(daySchedule, index) { %>
+                                    <% var dayOfWeek=daysOfWeek[index]; %>
+                                        <% if (daySchedule==="" ) { %>
 
-                            <% scheduleArray.forEach(function(daySchedule, index) { %>
-                                <% var dayOfWeek=daysOfWeek[index]; %>
-                                    <% if (daySchedule==="" ) { %>
-
-                                        <div class="bg-danger p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
-                                            <div><%= dayOfWeek %></div>
-                                             <div>Не рабочий день</div>
-                                        </div>
-
-                                        <% } else { %>
-                                            <div class="bg-info p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
+                                            <div class="bg-danger p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
                                                 <div><%= dayOfWeek %></div>
-                                                <div><%= daySchedule %></div>
+                                                <div>Не рабочий день</div>
                                             </div>
-                                <% } %>
-                        <% }); %>
+
+                                            <% } else { %>
+                                                <div class="bg-info p-2 rounded w-75 text-white mt-1 d-flex justify-content-between">
+                                                    <div><%= dayOfWeek %></div>
+                                                    <div><%= daySchedule %></div>
+                                                </div>
+                                    <% } %>
+                                <% }); %>
+                            <% } else {  %>
+                                <div class="bg-dark p-2 rounded text-white mt-1">
+                                    Еще нет расписания
+                                 </div>
+                                
+                                 <% }%>
             </div>
 
             <div class="busses bg-white p-3 rounded mt-4">
@@ -73,7 +79,9 @@
                 var scheduleString = data.bus;
                 %>
                     <% var bussesArray=JSON.parse(scheduleString); %>
+                    <% if(bussesArray) { %>
                             <% bussesArray.forEach(function(bus, index) { %>
+                            
                                 <div class="bg-success p-2 rounded text-white mt-1">
                                     <div class="d-flex align-items-center"> <span class="material-symbols-rounded">
                                         directions_bus
@@ -81,6 +89,11 @@
                                 </div>
 
                         <% }); %>
+                    <% } else {  %>
+                        <div class="bg-dark p-2 rounded text-white mt-1">
+                           Нет подходящего транспорта
+                        </div>
+                        <%  } %>
                 </div>
                
             </div>
