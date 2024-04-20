@@ -1,4 +1,5 @@
 const { generateAdminToken } = require("../middlewares/token")
+const {logger} = require("../middlewares/winston");
 const fauth = require('../fdb/firebase').fauth;
 
 exports.login = async function (req, res, next) {
@@ -12,23 +13,21 @@ exports.login = async function (req, res, next) {
             res.cookie('admin', token, { maxAge: process.env.TOKEN_EXPIRE * 100000 })
             res.header('Authorization', `Bearer ${token}`)
             r['r'] = 1;
+            logger.info(`${email} entered to website`)
             res.send(r)
-        }, (err) => {
-            console.log(err);
-            if (err.code == 'auth/wrong-password') {
-                r['r'] = 0;
-            }
-            res.send(JSON.stringify(r));
         });
     } catch (err) {
-        console.log(err);
+        console.error('Internal Server Error')
+        logger.error(err.message)
         res.send(r);
     }
 }
 
 exports.logout = async function (req, res, next) {
     let r = { r: 1 };
+    const admin = req.user._id
     res.clearCookie('admin')
+    logger.info(`${admin} logged out`)
     res.header('Authorization', null);
     res.send(r)
 }
