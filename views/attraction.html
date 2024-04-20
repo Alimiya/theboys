@@ -6,6 +6,61 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <style>
+        body{
+            background-color: aliceblue;
+        }
+
+        .additional {
+            flex-direction: column;
+        }
+
+        @media (max-width: 1300px){
+            .additional {
+            flex-direction: row ;
+            gap: 50px;
+        }
+        #schedule {
+            margin-top: 0 !important;
+        }
+        #schedule > div {
+            flex-direction: column !important;
+        }
+        }
+
+        @media (max-width: 1000px){
+            .additional {
+            flex-direction: row ;
+            gap: 50px;
+        }
+        .address{
+            width: 100%;
+        }
+        .busses  {
+            margin-top: 0 !important;
+        }
+        }
+
+        @media (max-width: 500px){
+            .additional {
+            flex-direction: row ;
+            gap: 50px;
+        }
+        .additional {
+            width: 100%;
+        }
+        #schedule {
+            width: 100%;
+        }
+        .busses{
+            width: 100%;
+        }
+        #map{
+            width: 100% !important;
+        }
+        }
+
+
+
        
     </style>
 </head>
@@ -13,7 +68,9 @@
 <body>
 
     <div class="container d-flex gap-5 attraction align-items-start flex-wrap">
+       
         <div class="content bg-white p-5 rounded">
+            <img src="<%= data.attraction_img %>" class="rounded mb-3" style="width: 90%;" alt="">
             <h1>
                 <%= data.attraction_name %>
             </h1>
@@ -21,7 +78,7 @@
                 <%= data.description %>
             </p>
         </div>
-        <div class="additional d-flex flex-column flex-wrap">
+        <div class="additional d-flex  flex-wrap">
             <div class="address bg-white p-3 rounded">
                 <h4>Как пройти ?</h4>
                 <div>

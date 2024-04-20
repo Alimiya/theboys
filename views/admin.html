@@ -377,7 +377,7 @@
         function addAttraction() {
             const formData = new FormData();
             formData.append('short_description', $('#new_short_description').val());
-            formData.append('bus', JSON.stringify([]));
+            formData.append('bus', "");
             formData.append('attraction_name', $('#new_attraction_name').val());
             formData.append('address', $('#new_address').val());
             formData.append('phone', $('#new_phone').val());
