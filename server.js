@@ -5,9 +5,8 @@ const cookieParser = require('cookie-parser')
 const path = require('path')
 const expressLayouts = require('express-ejs-layouts')
 require("dotenv").config({path: "config/.env"})
-require("./translate")
-const index = require('./routes/index')
-const adminRoute = require('./routes/adminRoute')
+// const index = require('./routes/index')
+// const adminRoute = require('./routes/adminRoute')
 
 app.set('views', path.join(__dirname, 'views'))
 app.engine('html', require('ejs').renderFile)
@@ -22,8 +21,8 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.use('/', index)
-app.use('/api/admin', adminRoute)
+// app.use('/', index)
+// app.use('/api/admin', adminRoute)
 
 app.use((req, res, next) => {
     res.status(404).render('error/error')
