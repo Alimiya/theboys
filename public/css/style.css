@@ -1,0 +1,51 @@
+body {
+    font-size: 16px;
+    font-family: 'Montserrat';
+}
+
+/* Header */
+.header__logo {
+    width: 200px;
+}
+
+.header__search {
+    width: 60%;
+    position: relative;
+}
+
+.header__search input {
+    border-bottom: 2px solid var(--custom-blue);
+    font-size: 20px;
+}
+
+.header__search input:focus {
+    border-bottom: 2px solid #233A8A;
+}
+
+.header__search button {
+    position: absolute;
+    top: 60%;
+    right: 2%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.header__search button span {
+    font-size: 2rem;
+    color: var(--custom-cyan);
+}
+
+#login-btn {
+    font-size: 1.5rem;
+    background-color: var(--custom-cyan);
+    border-color: var(--custom-cyan);
+}
+
+
+
+/* Index */
