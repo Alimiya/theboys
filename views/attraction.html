@@ -1,8 +1,8 @@
 <head>
     <link rel="stylesheet" href="/public/css/style.css">
     <title>CityPass</title>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfmQaXF8mZQPL-WXCPMXtL2rC-ZJgW3WA&libraries=places"></script>
+    <!-- <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfmQaXF8mZQPL-WXCPMXtL2rC-ZJgW3WA&libraries=places"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <style>
@@ -123,7 +123,10 @@
         $(() => {
             $('#end').val('<%= data.address %>');
             setTimeout(() => {
-                triggerClick()
+                if(document.getElementById('start').value){
+                    triggerClick()
+                }
+               
             }, 1500)
           
         })
