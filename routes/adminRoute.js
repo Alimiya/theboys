@@ -4,7 +4,7 @@ const Controller = require('../controllers/adminController')
 const upload = require('../middlewares/multer')
 const {verifyAdminToken} = require('../middlewares/verify')
 
-router.get('/', verifyAdminToken(process.env.ADMIN_TOKEN_SECRET), Controller.get)
+router.get('/', Controller.get)
 router.post('/create', upload.single('attraction_img'), Controller.create)
 router.post('/update/:id', Controller.update)
 router.post('/delete/:id', Controller.delete)
