@@ -7,6 +7,7 @@ const expressLayouts = require('express-ejs-layouts')
 require("dotenv").config({path: "config/.env"})
 const index = require('./routes/index')
 const adminRoute = require('./routes/adminRoute')
+const authRoute = require('./routes/authRoute')
 
 app.set('views', path.join(__dirname, 'views'))
 app.engine('html', require('ejs').renderFile)
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 app.use('/', index)
 app.use('/api/admin', adminRoute)
+app.use('/api/auth', authRoute)
 
 app.use((req, res, next) => {
     res.status(404).render('errors/error')
