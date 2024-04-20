@@ -13,11 +13,11 @@ const metadata = {
 
 exports.create = async (req, res) => {
     var r = { r: 0 };
-    const { attraction_name, description, short_description, address, week_days, open_time, close_time, price, phone, bus } = req.body;
+    const { attraction_name, description, short_description, address, schedule, phone, bus } = req.body;
     const attraction_img = req.file;
     console.log(req.body)
 
-    if (!attraction_name || !description ||!short_description || !address || !week_days || !open_time || !close_time || !price || !phone || !bus) {
+    if (!attraction_name || !description ||!short_description || !address || !schedule || !phone || !bus) {
         fs.unlink(attraction_img.path, () => { })
         return res.send(JSON.stringify(r));
     }
@@ -27,12 +27,7 @@ exports.create = async (req, res) => {
         description: description,
         short_description: short_description,
         address: address,
-        schedule: {
-            week_days: week_days,
-            open_time: open_time,
-            close_time: close_time
-        },
-        price: price,
+        schedule: schedule,
         phone: phone,
         bus: bus
     }).then(async (attraction) => {
