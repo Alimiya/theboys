@@ -27,7 +27,11 @@ app.use('/api/admin', adminRoute)
 app.use('/api/auth', authRoute)
 
 app.use((req, res, next) => {
-    res.status(404).render('errors/error')
+    res.status(404).render('errors/error-404')
+})
+
+app.use((req, res, next) => {
+    res.status(500).render('errors/error-500')
 })
 
 app.listen(process.env.PORT, ()=> {

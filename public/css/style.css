@@ -4,7 +4,7 @@
 }
 
 .header__search {
-    width: 60%;
+    width: 50%;
     position: relative;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .catalog__element img{
-    width: 400px;
+    width: 500px;
     border-radius: .5rem;
 }
 
@@ -58,3 +58,18 @@
 footer {
     background-color: var(--bs-gray-500);
 }
+
+
+
+/* Error Page */
+.error {
+    margin: 4rem;
+}
+
+.error img {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+}
+  
+  
