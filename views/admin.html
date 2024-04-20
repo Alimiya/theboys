@@ -1,7 +1,466 @@
 <head>
-    <title>Document</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <title>CityPass</title>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfmQaXF8mZQPL-WXCPMXtL2rC-ZJgW3WA&libraries=places"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            background-color: aliceblue;
+        }
+
+        .selected {
+            background-color: #0d6efd;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <div class="container  bg-white p-0 rounded">
+        <div class="p-3 rounded d-flex align-items-start flex-wrap" style="gap: 60px;">
+            <button class="btn btn-primary" onclick="showAddAttractionBlock()">+ Добавить достопримечательность</button>
+            <h2 id="attraction_title"></h2>
+        </div>
+    </div>
+    <div class="container d-flex gap-5 attraction align-items-start flex-wrap p-0 mt-2">
+        <div id="navbar_attractions" class="p-3 rounded">
+
+
+        </div>
+        <div class="attraction_edit p-3 rounded bg-white">
+            <img src="" id="attraction_img_src" alt="" width="400" height="300" class="rounded">
+            <div class="form-group mt-3 mb-3">
+                <label for="attraction_img">Изображение достопримечательности:</label>
+                <input type="file" class="form-control" id="attraction_img">
+            </div>
+            <div class="form-group mt-3 mb-3">
+                <label for="attraction_name">Название достопримечательности:</label>
+                <input type="text" class="form-control" id="attraction_name">
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="short_description">Краткое описание:</label>
+                <textarea class="form-control" id="short_description" rows="3"></textarea>
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="schedule" class="mb-2">Расписание:</label>
+                <div id="schedule">
+
+                </div>
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="bus" class="mb-2">Автобусы:</label>
+                <div id="busses" class="d-flex flex-wrap gap-3">
+
+                </div>
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="address">Адрес:</label>
+                <input type="text" class="form-control" id="address">
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="phone">Телефон:</label>
+                <input type="text" class="form-control" id="phone">
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="description">Описание:</label>
+                <textarea class="form-control" id="description" rows="5"></textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary mt-3" onclick="editAttraction()">Обновить</button>
+            <button type="button" class="btn btn-danger mt-3" onclick="deleteAttraction()"> Удалить</button>
+        </div>
+
+        <div class="attraction_add p-3 rounded bg-white">
+            <img src="https://www.pngall.com/wp-content/uploads/2/Upload-PNG-Free-Image.png" id="new_attraction_img_src"
+                alt="" width="400" height="300" class="rounded">
+            <div class="form-group mt-3 mb-3">
+                <label for="new_attraction_img">Изображение достопримечательности:</label>
+                <input type="file" class="form-control" id="new_attraction_img">
+            </div>
+            <div class="form-group mt-3 mb-3">
+                <label for="new_attraction_name">Название достопримечательности:</label>
+                <input type="text" class="form-control" id="new_attraction_name">
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="new_short_description">Краткое описание:</label>
+                <textarea class="form-control" id="new_short_description" rows="3"></textarea>
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="new_schedule" class="mb-2">Расписание:</label>
+                <div id="new_schedule">
+
+                </div>
+            </div>
+
+            <!-- <div class="form-group mt-3 mb-3">
+                <label for="new_bus" class="mb-2">Автобусы:</label>
+                <div id="new_busses" class="d-flex flex-wrap gap-3">
+
+                </div>
+            </div> -->
+
+            <div class="form-group mt-3 mb-3">
+                <label for="new_address">Адрес:</label>
+                <input type="text" class="form-control" id="new_address">
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="new_phone">Телефон:</label>
+                <input type="text" class="form-control" id="new_phone">
+            </div>
+
+            <div class="form-group mt-3 mb-3">
+                <label for="new_description">Описание:</label>
+                <textarea class="form-control" id="new_description" rows="5"></textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary mt-3" onclick="addAttraction()">Добавить</button>
+            
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="add_bus-modal">
+        <div class="modal-dialog text-left">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Добавить</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mt-3 mb-3">
+                        <label for="bus_number">Номер:</label>
+                        <input type="number" class="form-control" id="bus_number">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Отмена
+                        </button>
+                        <button type="button" class="btn btn-success" id="delete_category_btn" onclick="addBus()">
+                            Добавить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+        var globalAttractions;
+        var globalAttractionId;
+        var globalAttractionIndex;
+        var globalBusIndex = 0;
+        var globalBusses;
+        var days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+
+
+        $(() => {
+            loading(3, el = "#navbar_attractions")
+            getAllAttractions();
+            $('#attraction_img').on('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imageUrl = e.target.result;
+                        // Update the image source in the HTML
+                        $('#attraction_img_src').attr('src', imageUrl);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            $('#new_attraction_img').on('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imageUrl = e.target.result;
+                        $('#new_attraction_img_src').attr('src', imageUrl);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        async function getAllAttractions() {
+            try {
+                const response = await fetch('/api/admin', {
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                if (response.ok) {
+                    let attractionsHTML = "";
+                    let data = await response.json();
+                    globalAttractions = data;
+                    $("#catalog-list").html();
+                    data.forEach((a, index) => {
+
+                        attractionsHTML += `
+                        <div class="attraction_item" id="attraction-${index}" onclick=showAttraction("attraction-${index}")>
+                            ${a.attraction_name}
+                        </div>
+                         `
+                    });
+                    loading(30, el = "#navbar_attractions")
+                    $("#navbar_attractions").append(attractionsHTML);
+                    $('.attraction_item').click(function () {
+
+                        $('.attraction_item').removeClass('selected');
+
+                        $(this).addClass('selected');
+
+                    });
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        function showAttraction(attr_index) {
+            $('.attraction_edit').fadeIn();
+            $('.attraction_add').hide();
+            globalBusIndex = 0;
+            globalAttractionIndex = attr_index;
+            var scheduleHTML = '';
+            var bussesHTML = '';
+            var selected_attr_id = globalAttractionIndex.split('-')[1];
+            var attr_data = globalAttractions[selected_attr_id];
+            globalAttractionId = attr_data.attraction_id;
+            var schedule_data = JSON.parse(attr_data.schedule);
+            var busses_data = JSON.parse(attr_data.bus);
+            globalBusses = busses_data
+            $('#short_description').val(attr_data.short_description);
+            $('#schedule').val(attr_data.schedule);
+            $('#bus').val(attr_data.bus);
+            $("#attraction_img_src").attr('src', attr_data.attraction_img)
+
+            days.forEach((day, index) => {
+                if (schedule_data[index]) {
+                    var scheduleTime = schedule_data[index].split('-')
+                    scheduleHTML += `<div class="week_day d-flex justify-content-start gap-3 align-items-center w-50 mt-2" id="weekday-${index}">
+                        <div class="flex-fill">${days[index]}</div>
+                        <input type="time" name="from" class="form-control" value="${scheduleTime[0]}" />
+                        <input type="time" name="to" class="form-control" value="${scheduleTime[1]}" >
+                        <span class="material-symbols-rounded" style="cursor:pointer" onclick="clearInputTime('weekday-${index}')">
+                         refresh
+                        </span>
+                    </div>`
+                } else {
+                    scheduleHTML += `<div class="week_day d-flex justify-content-start gap-3 align-items-center w-50 mt-2" id="weekday-${index}">
+                        <div class="flex-fill">${days[index]}</div>
+                        <input type="time" name="from" class="form-control"  />
+                        <input type="time" name="to" class="form-control"  >
+                    </div>`
+                }
+
+            });
+
+            if (busses_data.length) {
+                busses_data.forEach((bus, index) => {
+                    bussesHTML += `
+                <div class="bus bg-primary text-white p-2 rounded d-flex align-items-center gap-2" id="bus-${index}"> <div class="bus_number">${bus}</div>
+                    <span class="material-symbols-rounded" onclick="deleteBus('bus-${index}')">
+                        delete
+                </span></div>
+                `
+                });
+            }
+
+
+            bussesHTML += `
+                <div class="bus bg-primary text-white p-2 rounded d-flex align-items-center gap-2"> 
+                    <span class="material-symbols-rounded" onclick="showAddBusModal('bus-${busses_data.length}')">
+                        add
+                </span></div>
+                `
+            $("#busses").html(bussesHTML);
+            $("#schedule").html(scheduleHTML)
+            $("#attraction_title").html(attr_data.attraction_name);
+            $('#attraction_name').val(attr_data.attraction_name);
+            $('#address').val(attr_data.address);
+            $('#phone').val(attr_data.phone);
+            $('#description').val(attr_data.description);
+        }
+
+
+
+        function showAddAttractionBlock() {
+            $('.attraction_edit').hide();
+            $('.attraction_add').fadeIn();
+            $('#attraction_title').html('');
+            var scheduleHTML = '';
+            var bussesHTML = ''
+            var busses_data = []
+            globalBusses = busses_data
+            days.forEach((day, index) => {
+
+                scheduleHTML += `<div class="week_day d-flex justify-content-start gap-3 align-items-center w-50 mt-2" id="weekday-${index}">
+                        <div class="flex-fill">${days[index]}</div>
+                        <input type="time" name="from" class="form-control"  />
+                        <input type="time" name="to" class="form-control"  >
+                    </div>`
+            });
+            $("#new_schedule").html(scheduleHTML);
+        
+
+        }
+
+        function addBus(bus_index) {
+            var bus = $("#bus_number").val();
+
+            if (!bus.trim()) {
+                return $("#bus_number").focus()
+            }
+
+            if (globalBusses.includes(bus)) {
+                return alert('Такой автобус уже существует')
+            }
+            var selected_attr_id = globalAttractionIndex.split('-')[1];
+            var busses = JSON.parse(globalAttractions[selected_attr_id].bus);
+            if (!busses) busses = [];
+            busses.push(bus);
+            $('#add_bus-modal').modal('hide')
+            globalAttractions[selected_attr_id].bus = JSON.stringify(busses);
+            showAttraction(globalAttractionIndex)
+            $("#bus_number").val('');
+
+        }
+
+       
+        function editAttraction() {
+            const formData = new FormData();
+            formData.append('attraction_id', globalAttractionId);
+            formData.append('short_description', $('#short_description').val());
+            formData.append('bus', JSON.stringify(getBusses('#busses')));
+            formData.append('attraction_name', $('#attraction_name').val());
+            formData.append('address', $('#address').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('description', $('#description').val());
+            formData.append('attraction_img', $('#attraction_img')[0].files[0]);
+            formData.append('schedule', JSON.stringify(getSchedule('#schedule')));
+
+            $.ajax({
+                url: '/attraction/edit',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log('Success:', response);
+                    // Handle the successful response
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    // Handle the error
+                }
+            });
+        }
+
+        function addAttraction() {
+            const formData = new FormData();
+            formData.append('short_description', $('#new_short_description').val());
+            formData.append('bus', JSON.stringify([]));
+            formData.append('attraction_name', $('#new_attraction_name').val());
+            formData.append('address', $('#new_address').val());
+            formData.append('phone', $('#new_phone').val());
+            formData.append('description', $('#new_description').val());
+            formData.append('attraction_img', $('#new_attraction_img')[0].files[0]);
+            formData.append('schedule', JSON.stringify(getSchedule('#new_schedule')));
+
+            $.ajax({
+                url: '/api/admin/create',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    console.log('Success:', response);
+                    // Handle the successful response
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    // Handle the error
+                }
+            });
+        }
+
+        function getBusses(containerSelector) {
+            const buses = [];
+            $(containerSelector + ' .bus .bus_number').each(function () {
+                const bus = $(this).text().trim();
+
+                if (bus && !bus.includes('add')) {
+                    buses.push(bus);
+                }
+            });
+            return buses;
+        }
+
+
+        function getSchedule(containerSelector) {
+            const schedule = [];
+            $(containerSelector + ' .week_day').each(function () {
+                const from = $(this).find('input[name="from"]').val();
+                const to = $(this).find('input[name="to"]').val();
+                if (!from || !to) {
+                    schedule.push('');
+                } else {
+                    schedule.push(`${from}-${to}`);
+                }
+
+            });
+            return schedule;
+        }
+
+        function showAddBusModal(bus_index) {
+            globalBusIndex = bus_index;
+            $('#add_bus-modal').modal('show')
+        }
+
+        function deleteBus(bus_index) {
+            $(`#${bus_index}`).remove()
+        }
+
+        function clearInputTime(time_index) {
+            $(`#${time_index} input[type="time"]`).val('');
+        }
+
+        function deleteAttraction(){
+            $.ajax({
+                url: '/api/admin/delete',
+                type: 'POST',
+                data: {attraction_id: globalAttractionId},
+                success: function (res) {
+                    if(res.r){
+                        alert('Удалено')
+                        window.location.reload()
+                    }
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.log(error)
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>

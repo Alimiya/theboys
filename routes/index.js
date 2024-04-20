@@ -2,12 +2,23 @@ const express = require('express');
 const router = express.Router();
 const fdb = require("../fdb/firebase").fdb;
 
+router.use((req, res, next) => {
+    const isAdminCookieExists = req.cookies.admin && req.originalUrl.startsWith('/admin');
+    res.locals.isAdmin = isAdminCookieExists;
+    res.locals.page = '';
+    next();
+});
+
 router.get('/', async (req, res) => {
     res.render('index');
 })
 
 router.get('/login', (req, res) => {
     res.render('login');
+})
+
+router.get('/admin', (req, res) => {
+    res.render('admin');
 })
 
 router.get('/attraction/:attr_id', async(req,res)=>{
@@ -19,6 +30,8 @@ router.get('/attraction/:attr_id', async(req,res)=>{
         res.render('attraction', {data: {...attr_data.data(), attr_id: attr_data.id}});
     });
 });
+
+
 
 
 module.exports = router

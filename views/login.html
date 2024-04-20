@@ -4,7 +4,7 @@
     <style>
         .login {
             background-color: white;
-            margin: 9vh auto;
+            margin: 15vh auto;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,6 +21,9 @@
             .login div {
                 width: 100% !important;
             }
+        }
+        header{
+            display: none;
         }
     </style>
 </head>
@@ -81,7 +84,7 @@
                         ambianceElement.html('<p>Success!</p>').addClass('success');
                         setTimeout(function () {
                             ambianceElement.removeClass('show success error info too-many-requests').html('');
-                            window.location.href = '/';
+                            window.location.href = '/admin';
                         }, 1000);
                     } else if (res.r == 0) {
                         ambianceElement.html('<p>Неверный пароль</p>').addClass('error');
@@ -101,6 +104,8 @@
         function isValidEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
+
+
     </script>
 </body>
 
