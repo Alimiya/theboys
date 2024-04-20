@@ -3,11 +3,7 @@ const router = express.Router();
 const fdb = require("../fdb/firebase").fdb;
 
 router.get('/', async (req, res) => {
-    await fdb.collection('attractions').get().then((attr_data)=>{
-        console.log(attr_data)
-        if(!attr_data.exists) return res.render('errors/error-404')
-        res.render('index', {data: attr_data });
-    });
+    res.render('index');
 })
 
 router.get('/attraction/:attr_id', async(req,res)=>{

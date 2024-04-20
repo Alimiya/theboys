@@ -4,35 +4,12 @@
 </head>
 <body>
     <div class="catalog px-3">
-        <div class="container-fluid">
+        <div class="container">
             <div class="catalog__inner">
                 <h1 class="catalog__title fw-semibold text-uppercase fs-1">Достопримечательности</h1>
                 <p>Мы собрали для вас лучшие достопримечательности столицы с полным описанием и честными отзывами от туристов.</p>
-                <div class="container">
-                    <div class="catalog__list mt-5">
-                        <div class="catalog__element d-flex gap-5 mb-5">
-                            <div class="catalog__content d-flex flex-column align-items-start">
-                                <h2 class="mb-4">Ethno-memorial complex «Atameken»</h2>
-                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, tempora aperiam! Voluptates corporis quas nam qui distinctio! Doloribus minima fugiat alias dolorem incidunt eius molestias, minus amet similique libero harum ipsam, quasi animi quisquam debitis voluptatem, nobis ipsa placeat eos? Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur harum, nisi eum error quasi, dicta ea unde quidem qui inventore est facilis suscipit et recusandae ipsum sint quaerat magnam molestias tenetur minima esse</p>
-                                <a type="button" class="btn custom-btn__cyan fs-5 mt-auto">Подробнее</a>
-                                <div class="catalog__price">
-
-                                </div>
-                            </div>
-                            <img class="catalog__img" src="/public/img/catalog/1.jpg" alt="">
-                        </div>
-                        <div class="catalog__element d-flex gap-5 mb-5">
-                            <div class="catalog__content d-flex flex-column align-items-start">
-                                <h2 class="mb-4">Ethno-memorial complex «Atameken»</h2>
-                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus, tempora aperiam! Voluptates corporis quas nam qui distinctio! Doloribus minima fugiat alias dolorem incidunt eius molestias, minus amet similique libero harum ipsam, quasi animi quisquam debitis voluptatem, nobis ipsa placeat eos? Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur harum, nisi eum error quasi, dicta ea unde quidem qui inventore est facilis suscipit et recusandae ipsum sint quaerat magnam molestias tenetur minima esse</p>
-                                <a type="button" class="btn custom-btn__cyan fs-5 mt-auto">Подробнее</a>
-                                <div class="catalog__price">
-
-                                </div>
-                            </div>
-                            <img class="catalog__img" src="/public/img/catalog/1.jpg" alt="">
-                        </div>
-                    </div>
+                <div class="catalog__list mt-5" id="catalog-list">
+                   
                 </div>
             </div>
         </div>
@@ -44,5 +21,65 @@
 
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            getAllAttractions();
+        })
+
+        async function getAllAttractions() {
+            try {
+                const response = await fetch('/api/admin', {
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                if (response.ok) {
+                    let attractionsHTML = "";
+                    let data = await response.json();
+                    console.log(data);
+                    $("#catalog-list").html();
+                    data.forEach((a, index) => {
+                        if (index % 2 === 0) {
+                            // Display content first, then image
+                            attractionsHTML += `
+                            <div class="catalog__element d-flex justify-content-between gap-5 mb-5" id="catalog-${index + 1}">
+                                <div class="catalog__content">
+                                    <h2 class="mb-4">${a.attraction_name}</h2>
+                                    <p>${a.short_description}</p>
+                                    <a type="button" class="btn custom-btn__cyan fs-5">Подробнее</a>
+                                </div>
+                                <div class="catalog__left">
+                                    <div class="img__container">
+                                        <img src="${a.attraction_img}" alt="">
+                                    </div>
+                                </div>
+                            </div>`;
+                        } else {
+                            // Display image first, then content
+                            attractionsHTML += `
+                            <div class="catalog__element d-flex justify-content-between gap-5 mb-5" id="catalog-${index + 1}">
+                                <div class="catalog__left">
+                                    <div class="img__container">
+                                        <img src="${a.attraction_img}" alt="">
+                                    </div>
+                                </div>
+                                <div class="catalog__content text-end">
+                                    <h2 class="mb-4">${a.attraction_name}</h2>
+                                    <p>${a.short_description}</p>
+                                    <a type="button" class="btn custom-btn__cyan fs-5">Подробнее</a>
+                                </div>
+                            </div>`;
+                        }
+                    });
+                    $("#catalog-list").append(attractionsHTML);
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    </script>
 </body>
 </html>

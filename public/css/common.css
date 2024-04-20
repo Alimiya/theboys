@@ -1,11 +1,11 @@
 :root {
     --custom-main: #212529;
     --custom-cyan: #00B2FF;
+    --custom-cyan-hover: #04aaf1;
     --custom-blue: #233A8A;
     --custom-red: #F02D59;
     --custom-darkblue: #111026;
     --custom-link: #8BA7C8;
-    --custom-title: #111026;
 }
 
 body {
