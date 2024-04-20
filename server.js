@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 
-// app.use('/', index)
+app.use('/', index)
 // app.use('/api/admin', adminRoute)
 
 app.use((req, res, next) => {
