@@ -226,6 +226,7 @@ body {
 .intro__element span{
     font-weight: 500;
     text-transform: uppercase;
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -272,6 +273,9 @@ body {
     font-family: sans-serif;
 }
 
+.text-end-custom {
+    text-align: end;
+}
 
 @media (max-width: 1399.98px) {}
 
@@ -306,6 +310,11 @@ body {
 
     .footer__social {
         margin-bottom: 1rem;
+    }
+
+    .intro__element {
+        flex-direction: column;
+        padding: 1rem 1.5rem;
     }
 }
 

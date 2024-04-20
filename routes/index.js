@@ -6,11 +6,12 @@ router.use((req, res, next) => {
     const isAdminCookieExists = req.cookies.admin && req.originalUrl.startsWith('/admin');
     res.locals.isAdmin = isAdminCookieExists;
     res.locals.page = '';
+    res.locals.pageName = 'default'
     next();
 });
 
 router.get('/', async (req, res) => {
-    res.render('index');
+    res.render('index', {pageName: 'index'});
 })
 
 router.get('/login', (req, res) => {

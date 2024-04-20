@@ -1,14 +1,5 @@
 <head>
     <title>CityPass</title>
-    <style>
-        
-        @media (max-width: 767.98px) {
-            .intro__element {
-                flex-direction: column;
-                padding: 1rem 1.5rem;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -112,7 +103,7 @@
                                         <img src="${a.attraction_img}" alt="">
                                     </div>
                                 </div>
-                                <div class="catalog__content text-end">
+                                <div class="catalog__content text-end-custom">
                                     <h2 class="mb-4">${a.attraction_name}</h2>
                                     <p>${a.short_description}</p>
                                     <a type="button" class="btn custom-btn__cyan fs-5" href="/attraction/${a.attraction_id}">Подробнее</a>
