@@ -6,6 +6,10 @@ router.get('/', async (req, res) => {
     res.render('index');
 })
 
+router.get('/login', (req, res) => {
+    res.render('login');
+})
+
 router.get('/attraction/:attr_id', async(req,res)=>{
     var attr_id = req.params.attr_id;
     console.log(attr_id)

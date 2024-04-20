@@ -21,7 +21,6 @@ exports.login = async function (req, res, next) {
         });
     } catch (err) {
         console.log(err);
-        r['r'] = 6;
         res.send(r);
     }
 }
