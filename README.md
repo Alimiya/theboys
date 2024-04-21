@@ -68,9 +68,9 @@ module.exports = {fdb, admin_fauth, fauth, storage}
 ```
 
 You have to get your serviceAccessKey from Google.
+// pfiles/serviceAccessKey.json
 
 ```json
-// pfiles/serviceAccessKey.json
 {
     "type": "",
     "project_id": "",
