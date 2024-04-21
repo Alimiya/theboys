@@ -1,4 +1,5 @@
 const express = require('express');
+const {verifyAdminToken} = require("../middlewares/verify");
 const router = express.Router();
 const fdb = require("../fdb/firebase").fdb;
 
@@ -18,7 +19,7 @@ router.get('/login', (req, res) => {
     res.render('login');
 })
 
-router.get('/admin', (req, res) => {
+router.get('/admin', verifyAdminToken(process.env.ADMIN_TOKEN_SECRET), (req, res) => {
     res.render('admin');
 })
 
