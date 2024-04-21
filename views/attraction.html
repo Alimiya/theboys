@@ -236,7 +236,9 @@
 
                     map.setCenter(pos);
                     document.getElementById('start').value = pos.lat + ', ' + pos.lng; // Set input value
-                    triggerClick()
+                    setTimeout(()=>{
+                        triggerClick();
+                    },1500)
                 }, function () {
                     handleLocationError(true, map.getCenter());
                 });
