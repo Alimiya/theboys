@@ -33,7 +33,7 @@ exports.create = async (req, res) => {
             address: address,
             schedule: schedule,
             phone: phone,
-       
+            bus: ""
         }).then(async (attraction) => {
             await storage.upload(attraction_img.path, {
                 gzip: true,
@@ -122,7 +122,7 @@ exports.update = async (req, res) => {
         let updateData = {
             attraction_name, description, short_description, address, schedule, phone, bus
         }
-
+      
         if (new_attraction_img != undefined) {
             updateData.attraction_img = `https://firebasestorage.googleapis.com/v0/b/smart-guide-d28d6.appspot.com/o/attractions%2F${attraction_id}?alt=media`
         }

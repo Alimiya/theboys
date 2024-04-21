@@ -125,7 +125,7 @@
             </div>
 
             <button type="button" class="btn btn-primary mt-3" onclick="addAttraction()">Добавить</button>
-            
+
         </div>
     </div>
 
@@ -199,39 +199,36 @@
 
         async function getAllAttractions() {
             try {
-                const response = await fetch('/api/admin', {
-                    method: 'get',
-                    headers: {
-                        'Content-Type': 'application/json'
+                $.ajax({
+                    url: '/api/admin',
+                    method: 'GET',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        let attractionsHTML = "";
+                        globalAttractions = data;
+                        $("#catalog-list").empty(); // Clear existing content
+                        $.each(data, function (index, a) {
+                            attractionsHTML += `
+                            <div class="attraction_item" id="attraction-${index}" onclick="showAttraction('attraction-${index}')">
+                                ${a.attraction_name}
+                            </div>
+                            `;
+                        });
+                        loading(30, "#navbar_attractions");
+                        $("#navbar_attractions").append(attractionsHTML);
+                        $('.attraction_item').click(function () {
+                            $('.attraction_item').removeClass('selected');
+                            $(this).addClass('selected');
+                        });
                     },
-                })
-                if (response.ok) {
-                    let attractionsHTML = "";
-                    let data = await response.json();
-                    globalAttractions = data;
-                    $("#catalog-list").html();
-                    data.forEach((a, index) => {
-
-                        attractionsHTML += `
-                        <div class="attraction_item" id="attraction-${index}" onclick=showAttraction("attraction-${index}")>
-                            ${a.attraction_name}
-                        </div>
-                         `
-                    });
-                    loading(30, el = "#navbar_attractions")
-                    $("#navbar_attractions").append(attractionsHTML);
-                    $('.attraction_item').click(function () {
-
-                        $('.attraction_item').removeClass('selected');
-
-                        $(this).addClass('selected');
-
-                    });
-                }
-
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
             } catch (error) {
                 console.log(error);
             }
+
         }
 
         function showAttraction(attr_index) {
@@ -319,7 +316,7 @@
                     </div>`
             });
             $("#new_schedule").html(scheduleHTML);
-        
+
 
         }
 
@@ -339,12 +336,13 @@
             busses.push(bus);
             $('#add_bus-modal').modal('hide')
             globalAttractions[selected_attr_id].bus = JSON.stringify(busses);
+            getAllAttractions()
             showAttraction(globalAttractionIndex)
             $("#bus_number").val('');
 
         }
 
-       
+
         function editAttraction() {
             const formData = new FormData();
             formData.append('attraction_id', globalAttractionId);
@@ -358,13 +356,15 @@
             formData.append('schedule', JSON.stringify(getSchedule('#schedule')));
 
             $.ajax({
-                url: '/attraction/edit',
+                url: '/api/admin/update',
                 type: 'POST',
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log('Success:', response);
+                    if (response.r) {
+                        alert('Обновлено успешно')
+                    }
                     // Handle the successful response
                 },
                 error: function (xhr, status, error) {
@@ -393,7 +393,7 @@
                 processData: false,
                 success: function (response) {
                     console.log('Success:', response);
-                    if(response.r){
+                    if (response.r) {
                         alert('Успешно добавлено')
                         window.location.reload()
                     }
@@ -446,17 +446,17 @@
             $(`#${time_index} input[type="time"]`).val('');
         }
 
-        function deleteAttraction(){
+        function deleteAttraction() {
             $.ajax({
                 url: '/api/admin/delete',
                 type: 'POST',
-                data: {attraction_id: globalAttractionId},
+                data: { attraction_id: globalAttractionId },
                 success: function (res) {
-                    if(res.r){
+                    if (res.r) {
                         alert('Удалено')
                         window.location.reload()
                     }
-                    
+
                 },
                 error: function (xhr, status, error) {
                     console.log(error)
